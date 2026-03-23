@@ -6,17 +6,21 @@ import { BakerHero } from '@/components/icons/DoodleIcons';
 import { Arrow2, Crumb1, Chunk2, Sparkle1, Sparkle3, Swirl2, Trail3 } from '@/components/decorative';
 import { SeasonalBanner } from '@/components/sections/SeasonalBanner';
 import { siteConfig } from '@/lib/data';
+import { showSeasonalDrop } from '@/lib/feature-flags';
 import { useI18n } from '@/lib/i18n';
 import { drawIn, revealScale, revealUp, storyViewport } from '@/lib/storytelling';
 
 export function Hero() {
   const { copy, t } = useI18n();
+  const heroTopPadding = showSeasonalDrop ? 'pt-[172px] md:pt-32' : 'pt-28 md:pt-24';
 
   return (
-    <section className="relative flex min-h-[calc(100svh-3rem)] flex-col justify-center overflow-hidden bg-cream pt-[172px] md:min-h-screen md:pt-32">
-      <div className="relative z-20 mx-auto w-full max-w-7xl px-5 pt-4 sm:px-6">
-        <SeasonalBanner />
-      </div>
+    <section className={`relative flex min-h-[calc(100svh-3rem)] flex-col justify-center overflow-hidden bg-cream md:min-h-screen ${heroTopPadding}`}>
+      {showSeasonalDrop ? (
+        <div className="relative z-20 mx-auto w-full max-w-7xl px-5 pt-4 sm:px-6">
+          <SeasonalBanner />
+        </div>
+      ) : null}
 
       <div className="relative z-10 mx-auto grid w-full max-w-7xl flex-1 grid-cols-1 items-center gap-10 px-5 py-10 sm:px-6 md:grid-cols-2 md:gap-16 md:py-14">
         <motion.div

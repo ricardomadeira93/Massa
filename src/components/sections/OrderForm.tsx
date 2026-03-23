@@ -3,7 +3,7 @@
 import { FormEvent, Suspense, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { coreProducts, deliverySlots, dropAndSpecialProducts, orderableProducts } from '@/lib/data';
+import { coreProducts, deliverySlots, dropAndSpecialProducts, orderableProducts, subscriptionProducts } from '@/lib/data';
 import { buildWhatsAppUrl } from '@/lib/whatsapp';
 import { SlotSelector } from '@/components/ui/SlotSelector';
 import { AllergenBanner } from '@/components/ui/AllergenBanner';
@@ -18,8 +18,12 @@ function OrderFormContent() {
 
   const orderGroups = [
     { label: copy.orderForm.groups.core, products: coreProducts },
-    { label: copy.orderForm.groups.seasonal, products: dropAndSpecialProducts },
+    ...(dropAndSpecialProducts.length > 0
+      ? [{ label: copy.orderForm.groups.seasonal, products: dropAndSpecialProducts }]
+      : []),
   ];
+
+  const showSubscriptionNote = subscriptionProducts.length > 0;
 
   const [formData, setFormData] = useState({
     name: '',
@@ -232,7 +236,9 @@ function OrderFormContent() {
                   ) : null,
                 )}
               </select>
-              <p className="ml-1 text-xs leading-relaxed text-ink-faint">{copy.orderForm.subscriptionNote}</p>
+              {showSubscriptionNote ? (
+                <p className="ml-1 text-xs leading-relaxed text-ink-faint">{copy.orderForm.subscriptionNote}</p>
+              ) : null}
               {errors.productId && <p id="error-productId" role="alert" className="ml-1 mt-1 text-xs font-medium text-red-500">{errors.productId}</p>}
             </div>
 

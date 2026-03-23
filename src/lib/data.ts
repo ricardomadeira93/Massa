@@ -1,4 +1,5 @@
 import { DeliverySlot, OrderableProduct, Product, SubscriptionProduct, isOrderableProduct, isSubscriptionProduct } from '@/types';
+import { showSeasonalDrop, showSubscription } from '@/lib/feature-flags';
 
 export const siteConfig = {
   name: 'Massa',
@@ -330,14 +331,19 @@ export const coreProducts: OrderableProduct[] = products.filter(
   (product): product is OrderableProduct => product.category === 'core' && isOrderableProduct(product),
 );
 
-export const dropAndSpecialProducts: OrderableProduct[] = products.filter(
+export const dropAndSpecialProducts: OrderableProduct[] = showSeasonalDrop
+  ? products.filter(
+      (product): product is OrderableProduct =>
+        (product.category === 'drop' || product.category === 'special') && isOrderableProduct(product),
+    )
+  : [];
+
+export const orderableProducts: OrderableProduct[] = products.filter(
   (product): product is OrderableProduct =>
-    (product.category === 'drop' || product.category === 'special') && isOrderableProduct(product),
+    isOrderableProduct(product) && (product.category === 'core' || showSeasonalDrop),
 );
 
-export const orderableProducts: OrderableProduct[] = products.filter(isOrderableProduct);
-
-export const subscriptionProducts: SubscriptionProduct[] = products.filter(isSubscriptionProduct);
+export const subscriptionProducts: SubscriptionProduct[] = showSubscription ? products.filter(isSubscriptionProduct) : [];
 
 export const deliverySlots: DeliverySlot[] = [
   {
