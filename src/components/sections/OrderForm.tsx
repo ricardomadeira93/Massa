@@ -3,16 +3,23 @@
 import { FormEvent, Suspense, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { products, deliverySlots } from '@/lib/data';
+import { coreProducts, deliverySlots, dropAndSpecialProducts, orderableProducts } from '@/lib/data';
 import { buildWhatsAppUrl } from '@/lib/whatsapp';
 import { SlotSelector } from '@/components/ui/SlotSelector';
 import { AllergenBanner } from '@/components/ui/AllergenBanner';
 import { Button } from '@/components/ui/Button';
 import { Arrow3, Heart2, Scribble1, Sparkle1, Swirl2, Trail1 } from '@/components/decorative';
+import { useI18n } from '@/lib/i18n';
 import { drawIn, revealScale, revealUp, storyViewport } from '@/lib/storytelling';
 
 function OrderFormContent() {
   const searchParams = useSearchParams();
+  const { language, copy, t } = useI18n();
+
+  const orderGroups = [
+    { label: copy.orderForm.groups.core, products: coreProducts },
+    { label: copy.orderForm.groups.seasonal, products: dropAndSpecialProducts },
+  ];
 
   const [formData, setFormData] = useState({
     name: '',
@@ -31,7 +38,7 @@ function OrderFormContent() {
 
   useEffect(() => {
     const produto = searchParams.get('produto');
-    if (produto && products.some((p) => p.id === produto && p.available)) {
+    if (produto && orderableProducts.some((product) => product.id === produto && product.available)) {
       setFormData((prev) => ({ ...prev, productId: produto }));
     }
   }, [searchParams]);
@@ -56,13 +63,13 @@ function OrderFormContent() {
 
   const validate = () => {
     const newErrors: Record<string, string> = {};
-    if (!formData.name.trim()) newErrors.name = 'Nome é obrigatório.';
-    if (!formData.phone.trim()) newErrors.phone = 'WhatsApp é obrigatório.';
-    if (!formData.bloco.trim()) newErrors.bloco = 'Bloco/Apt é obrigatório.';
-    if (!formData.productId) newErrors.productId = 'Selecione uma caixa.';
-    if (!formData.slotId) newErrors.slotId = 'Selecione um horário.';
+    if (!formData.name.trim()) newErrors.name = copy.orderForm.validation.name;
+    if (!formData.phone.trim()) newErrors.phone = copy.orderForm.validation.phone;
+    if (!formData.bloco.trim()) newErrors.bloco = copy.orderForm.validation.bloco;
+    if (!formData.productId) newErrors.productId = copy.orderForm.validation.product;
+    if (!formData.slotId) newErrors.slotId = copy.orderForm.validation.slot;
     if (formData.isGift && !formData.giftRecipient.trim()) {
-      newErrors.giftRecipient = 'Nome do presenteado é obrigatório.';
+      newErrors.giftRecipient = copy.orderForm.validation.giftRecipient;
     }
 
     setErrors(newErrors);
@@ -83,7 +90,7 @@ function OrderFormContent() {
     e.preventDefault();
     if (validate()) {
       try {
-        const url = buildWhatsAppUrl(formData);
+        const url = buildWhatsAppUrl(formData, language);
         window.open(url, '_blank', 'noopener,noreferrer');
         window.location.href = '/obrigado';
       } catch (err) {
@@ -93,14 +100,19 @@ function OrderFormContent() {
   };
 
   const getInputStyles = (errName: string) => `
-    w-full bg-white border-[3px] rounded-drawn px-4 py-3 text-base text-ink min-h-[50px]
+    w-full appearance-none bg-white border-[3px] rounded-drawn px-4 py-3.5 text-base text-ink min-h-[52px]
     transition-all outline-none placeholder:text-ink-faint shadow-[3px_3px_0_var(--ink)]
     focus:-translate-y-1
     ${errors[errName] ? 'border-terracotta ring-2 ring-terracotta focus:shadow-[4px_4px_0_var(--terracotta)]' : 'border-ink focus:border-orange focus:shadow-[4px_4px_0_var(--orange)]'}
   `;
 
+  const getFieldA11y = (fieldName: string) => ({
+    'aria-invalid': !!errors[fieldName],
+    'aria-describedby': errors[fieldName] ? `error-${fieldName}` : undefined,
+  });
+
   return (
-    <section id="pedido" className="relative overflow-hidden border-y border-sand bg-cream px-6 py-20">
+    <section id="pedido" className="relative scroll-mt-44 overflow-hidden border-y border-sand bg-cream px-5 py-16 sm:px-6 sm:py-20">
       <div className="relative mx-auto max-w-3xl">
         <motion.div
           initial="hidden"
@@ -112,17 +124,17 @@ function OrderFormContent() {
           <Swirl2 strokeColor="var(--caramel)" strokeWidth={3} className="h-24 w-24" />
         </motion.div>
 
-        <motion.div initial="hidden" whileInView="visible" viewport={storyViewport} className="mb-12 text-center">
+        <motion.div initial="hidden" whileInView="visible" viewport={storyViewport} className="mb-10 text-left sm:mb-12 sm:text-center">
           <div className="relative inline-block">
             <motion.h2 variants={revealUp(0)} className="mb-3 font-display text-4xl font-bold tracking-tight text-ink">
-              Fazer <span className="relative inline-block">pedido</span>
+              {copy.orderForm.title}
             </motion.h2>
             <motion.div variants={drawIn(0.18)} className="pointer-events-none absolute -bottom-3 left-1/2 w-32 -translate-x-1/2">
               <Trail1 className="h-6 w-full" strokeColor="var(--terracotta)" strokeWidth={2.5} />
             </motion.div>
           </div>
-          <motion.p variants={revealUp(0.08, 16)} className="font-body text-lg text-ink-muted">
-            Preencha os dados e confirme pelo WhatsApp.
+          <motion.p variants={revealUp(0.08, 16)} className="font-body text-base leading-relaxed text-ink-muted sm:text-lg">
+            {copy.orderForm.description}
           </motion.p>
         </motion.div>
 
@@ -132,64 +144,67 @@ function OrderFormContent() {
           viewport={storyViewport}
           variants={revealUp(0.12, 18)}
           onSubmit={handleSubmit}
-          className="space-y-8"
+          className="space-y-8 rounded-drawn border-[3px] border-ink bg-white/45 p-5 shadow-[5px_5px_0_var(--ink)] sm:p-6 md:p-8"
           noValidate
         >
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-6">
             <div className="space-y-1">
-              <label htmlFor="name" className="ml-1 text-sm font-medium text-ink-muted">
-                Seu nome
+              <label htmlFor="field-name" className="ml-1 text-sm font-semibold text-ink-muted">
+                {copy.orderForm.fields.name}
               </label>
               <input
                 id="field-name"
                 name="name"
                 type="text"
-                placeholder="Ex: Mariana"
+                placeholder={copy.orderForm.fields.namePlaceholder}
                 value={formData.name}
                 onChange={handleChange}
                 required
                 className={getInputStyles('name')}
+                {...getFieldA11y('name')}
               />
-              {errors.name && <p className="ml-1 mt-1 text-xs font-medium text-red-500">{errors.name}</p>}
+              {errors.name && <p id="error-name" role="alert" className="ml-1 mt-1 text-xs font-medium text-red-500">{errors.name}</p>}
             </div>
 
             <div className="space-y-1">
-              <label htmlFor="phone" className="ml-1 text-sm font-medium text-ink-muted">
-                WhatsApp
+              <label htmlFor="field-phone" className="ml-1 text-sm font-semibold text-ink-muted">
+                {copy.orderForm.fields.phone}
               </label>
               <input
                 id="field-phone"
                 name="phone"
                 type="tel"
-                placeholder="(41) 9 ..."
+                placeholder={copy.orderForm.fields.phonePlaceholder}
                 value={formData.phone}
                 onChange={handleChange}
                 required
                 className={getInputStyles('phone')}
+                {...getFieldA11y('phone')}
               />
-              {errors.phone && <p className="ml-1 mt-1 text-xs font-medium text-red-500">{errors.phone}</p>}
+              {errors.phone && <p id="error-phone" role="alert" className="ml-1 mt-1 text-xs font-medium text-red-500">{errors.phone}</p>}
             </div>
 
             <div className="space-y-1 md:col-span-2">
-              <label htmlFor="bloco" className="ml-1 text-sm font-medium text-ink-muted">
-                Bloco e Apartamento
+              <label htmlFor="field-bloco" className="ml-1 text-sm font-semibold text-ink-muted">
+                {copy.orderForm.fields.bloco}
               </label>
               <input
                 id="field-bloco"
                 name="bloco"
                 type="text"
-                placeholder="Ex: Bloco B, Apt 302"
+                placeholder={copy.orderForm.fields.blocoPlaceholder}
                 value={formData.bloco}
                 onChange={handleChange}
                 required
                 className={getInputStyles('bloco')}
+                {...getFieldA11y('bloco')}
               />
-              {errors.bloco && <p className="ml-1 mt-1 text-xs font-medium text-red-500">{errors.bloco}</p>}
+              {errors.bloco && <p id="error-bloco" role="alert" className="ml-1 mt-1 text-xs font-medium text-red-500">{errors.bloco}</p>}
             </div>
 
             <div className="space-y-1 md:col-span-2">
-              <label htmlFor="productId" className="ml-1 text-sm font-medium text-ink-muted">
-                Qual caixa deseja?
+              <label htmlFor="field-productId" className="ml-1 text-sm font-semibold text-ink-muted">
+                {copy.orderForm.fields.product}
               </label>
               <select
                 id="field-productId"
@@ -198,63 +213,73 @@ function OrderFormContent() {
                 onChange={handleChange}
                 required
                 className={getInputStyles('productId')}
+                {...getFieldA11y('productId')}
               >
                 <option value="" disabled>
-                  Selecione uma opção...
+                  {copy.orderForm.fields.productPlaceholder}
                 </option>
-                {products
-                  .filter((p) => p.available)
-                  .map((p) => (
-                    <option key={p.id} value={p.id}>
-                      {p.name} — R$ {p.price}
-                    </option>
-                  ))}
+                {orderGroups.map((group) =>
+                  group.products.some((product) => product.available) ? (
+                    <optgroup key={group.label} label={group.label}>
+                      {group.products
+                        .filter((product) => product.available)
+                        .map((product) => (
+                          <option key={product.id} value={product.id}>
+                            {t(product.name)} — R$ {product.price}
+                          </option>
+                        ))}
+                    </optgroup>
+                  ) : null,
+                )}
               </select>
-              {errors.productId && <p className="ml-1 mt-1 text-xs font-medium text-red-500">{errors.productId}</p>}
+              <p className="ml-1 text-xs leading-relaxed text-ink-faint">{copy.orderForm.subscriptionNote}</p>
+              {errors.productId && <p id="error-productId" role="alert" className="ml-1 mt-1 text-xs font-medium text-red-500">{errors.productId}</p>}
             </div>
 
             <div className="space-y-2 md:col-span-2" id="field-slotId">
-              <label className="ml-1 mb-1 block text-sm font-medium text-ink-muted">Horário de entrega</label>
+              <label className="ml-1 mb-1 block text-sm font-semibold text-ink-muted">{copy.orderForm.fields.deliverySlot}</label>
               <SlotSelector
                 slots={deliverySlots}
                 selectedId={formData.slotId}
                 onSelect={handleSlotSelect}
                 error={!!errors.slotId}
               />
-              {errors.slotId && <p className="ml-1 text-xs font-medium text-red-500">{errors.slotId}</p>}
+              {errors.slotId && <p id="error-slotId" role="alert" className="ml-1 text-xs font-medium text-red-500">{errors.slotId}</p>}
             </div>
 
             <div className="space-y-1 md:col-span-2">
-              <label htmlFor="flavourNote" className="ml-1 text-sm font-medium text-ink-muted">
-                Sabores desejados <span className="font-normal opacity-70">(Opcional)</span>
+              <label htmlFor="field-flavourNote" className="ml-1 text-sm font-semibold text-ink-muted">
+                {copy.orderForm.fields.flavourNote} <span className="font-normal opacity-70">({copy.common.optional})</span>
               </label>
               <textarea
                 id="field-flavourNote"
                 name="flavourNote"
                 rows={2}
-                placeholder="Ex: sem amendoim, mais chocolate"
+                placeholder={copy.orderForm.fields.flavourPlaceholder}
                 value={formData.flavourNote}
                 onChange={handleChange}
                 className={getInputStyles('flavourNote')}
+                {...getFieldA11y('flavourNote')}
               />
             </div>
 
             <div className="space-y-1 md:col-span-2">
-              <label htmlFor="allergyNote" className="ml-1 text-sm font-medium text-ink-muted">
-                Observações sobre alergias <span className="font-normal opacity-70">(Opcional)</span>
+              <label htmlFor="field-allergyNote" className="ml-1 text-sm font-semibold text-ink-muted">
+                {copy.orderForm.fields.allergyNote} <span className="font-normal opacity-70">({copy.common.optional})</span>
               </label>
               <input
                 id="field-allergyNote"
                 name="allergyNote"
                 type="text"
-                placeholder="Ex: Intolerância à lactose"
+                placeholder={copy.orderForm.fields.allergyPlaceholder}
                 value={formData.allergyNote}
                 onChange={handleChange}
                 className={getInputStyles('allergyNote')}
+                {...getFieldA11y('allergyNote')}
               />
             </div>
 
-            <div className="relative mt-4 space-y-4 rounded-drawn border-[3px] border-ink bg-butter/50 p-6 shadow-[4px_4px_0_var(--ink)] md:col-span-2">
+            <div className="relative mt-2 space-y-4 rounded-drawn border-[3px] border-ink bg-butter/50 p-5 shadow-[4px_4px_0_var(--ink)] md:col-span-2 md:p-6">
               <motion.div
                 animate={{
                   opacity: formData.isGift ? 1 : 0.45,
@@ -279,35 +304,34 @@ function OrderFormContent() {
                   />
                 </div>
                 <span className="mt-1 font-display text-xl font-bold leading-none text-ink transition-colors group-hover:text-orange">
-                  É um presente?
+                  {copy.orderForm.fields.giftToggle}
                 </span>
               </label>
 
               {formData.isGift && (
                 <div className="animate-in slide-in-from-top-2 fade-in mt-4 grid gap-6 border-t border-sand/50 pt-4 duration-300">
                   <div className="space-y-1">
-                    <label htmlFor="giftRecipient" className="ml-1 text-sm font-medium text-ink-muted">
-                      Para quem é?
+                    <label htmlFor="field-giftRecipient" className="ml-1 text-sm font-semibold text-ink-muted">
+                      {copy.orderForm.fields.giftRecipient}
                     </label>
                     <input
                       id="field-giftRecipient"
                       name="giftRecipient"
                       type="text"
-                      placeholder="Nome do presenteado"
+                      placeholder={copy.orderForm.fields.giftRecipientPlaceholder}
                       value={formData.giftRecipient}
                       onChange={handleChange}
                       required
                       className={getInputStyles('giftRecipient')}
+                      {...getFieldA11y('giftRecipient')}
                     />
-                    {errors.giftRecipient && (
-                      <p className="ml-1 mt-1 text-xs font-medium text-red-500">{errors.giftRecipient}</p>
-                    )}
+                    {errors.giftRecipient && <p id="error-giftRecipient" role="alert" className="ml-1 mt-1 text-xs font-medium text-red-500">{errors.giftRecipient}</p>}
                   </div>
 
                   <div className="space-y-1">
                     <div className="mb-1 flex items-baseline justify-between">
-                      <label htmlFor="giftMessage" className="ml-1 text-sm font-medium text-ink-muted">
-                        Mensagem do cartão impresso
+                      <label htmlFor="field-giftMessage" className="ml-1 text-sm font-semibold text-ink-muted">
+                        {copy.orderForm.fields.giftMessage}
                       </label>
                       <span className={`text-xs ${formData.giftMessage.length > 120 ? 'text-red-500' : 'text-ink-faint'}`}>
                         {formData.giftMessage.length}/120
@@ -318,10 +342,11 @@ function OrderFormContent() {
                       name="giftMessage"
                       rows={3}
                       maxLength={120}
-                      placeholder="Escreva uma mensagem carinhosa..."
+                      placeholder={copy.orderForm.fields.giftMessagePlaceholder}
                       value={formData.giftMessage}
                       onChange={handleChange}
                       className={getInputStyles('giftMessage')}
+                      {...getFieldA11y('giftMessage')}
                     />
                   </div>
                 </div>
@@ -334,7 +359,7 @@ function OrderFormContent() {
 
             <div className="group/submit relative">
               <Button type="submit" variant="solid-orange" className="w-full py-4 text-lg leading-none">
-                Enviar pedido via WhatsApp
+                {copy.orderForm.submit}
               </Button>
 
               <motion.div
@@ -369,11 +394,13 @@ function OrderFormContent() {
 }
 
 export function OrderForm() {
+  const { copy } = useI18n();
+
   return (
     <Suspense
       fallback={
         <section id="pedido" className="flex min-h-[500px] items-center justify-center border-y border-sand bg-cream px-6 py-20">
-          <div className="font-display text-2xl text-ink-muted animate-pulse">Carregando formulário...</div>
+          <div className="font-display text-2xl text-ink-muted animate-pulse">{copy.orderForm.loading}</div>
         </section>
       }
     >

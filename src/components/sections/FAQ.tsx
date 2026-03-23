@@ -5,45 +5,25 @@ import { motion } from 'framer-motion';
 import { FAQAccordion } from '@/components/ui/FAQAccordion';
 import { Crumb4, DividerDoodle, Sparkle1, Trail3 } from '@/components/decorative';
 import { siteConfig } from '@/lib/data';
+import { useI18n } from '@/lib/i18n';
 import { drawIn, revealScale, revealUp, storyViewport } from '@/lib/storytelling';
-
-const faqs = [
-  {
-    q: 'Até quando posso fazer um pedido?',
-    a: 'Aceitos até sexta-feira às 18h.',
-  },
-  {
-    q: 'Vocês entregam fora do condomínio?',
-    a: 'Apenas dentro do condomínio, pessoalmente.',
-  },
-  {
-    q: 'Como funciona o pagamento via Pix?',
-    a: 'A chave será enviada pelo WhatsApp logo após a confirmação do seu pedido e disponibilidade.',
-  },
-  {
-    q: 'Tem opção sem glúten ou vegana?',
-    a: 'Não. Todos os nossos produtos contêm glúten, ovos e laticínios no momento.',
-  },
-  {
-    q: 'Posso cancelar meu pedido?',
-    a: 'Sim, até sábado às 8h enviando uma mensagem via WhatsApp.',
-  },
-];
 
 export function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
+  const { copy } = useI18n();
+  const faqs = copy.faq.items;
 
   const handleSupportClick = () => {
     window.open(`https://wa.me/${siteConfig.whatsappNumber}`, '_blank');
   };
 
   return (
-    <section id="faq" className="relative bg-butter px-6 py-20">
+    <section id="faq" className="relative scroll-mt-44 bg-butter px-5 py-16 sm:px-6 sm:py-20">
       <div className="mx-auto max-w-2xl">
-        <motion.div initial="hidden" whileInView="visible" viewport={storyViewport} className="group/faq-heading mb-12 text-center">
+        <motion.div initial="hidden" whileInView="visible" viewport={storyViewport} className="group/faq-heading mb-10 text-left sm:mb-12 sm:text-center">
           <div className="relative inline-block">
             <motion.h2 variants={revealUp(0)} className="mb-2 font-display text-4xl font-bold tracking-tight text-ink">
-              Dúvidas Frequentes
+              {copy.faq.title}
             </motion.h2>
             <motion.div
               variants={revealScale(0.14, 0.84)}
@@ -52,12 +32,12 @@ export function FAQ() {
               <Sparkle1 className="h-8 w-8" fillColor="var(--cream)" strokeColor="var(--terracotta)" />
             </motion.div>
           </div>
-          <motion.p variants={revealUp(0.08, 16)} className="font-body text-ink-muted">
-            Prazo, pagamentos e entregas.
+          <motion.p variants={revealUp(0.08, 16)} className="font-body text-sm leading-relaxed text-ink-muted sm:text-base">
+            {copy.faq.description}
           </motion.p>
         </motion.div>
 
-        <div className="space-y-3">
+        <div className="space-y-2 sm:space-y-3">
           {faqs.map((faq, idx) => (
             <FAQAccordion
               key={faq.q}
@@ -70,7 +50,7 @@ export function FAQ() {
           ))}
 
           <FAQAccordion
-            question="Não encontrei minha dúvida"
+            question={copy.faq.contactCta}
             isOpen={false}
             onToggle={handleSupportClick}
             isAction

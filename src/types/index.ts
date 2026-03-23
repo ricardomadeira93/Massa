@@ -1,20 +1,54 @@
-export interface Product {
+export type Language = 'pt' | 'en' | 'es';
+export type LocalizedText = Record<Language, string>;
+
+export type ProductCategory = 'core' | 'drop' | 'special' | 'subscription';
+export type ProductCtaMode = 'order' | 'interest';
+export type ProductIllustration = 'classica' | 'presente' | 'mini' | 'festa';
+
+interface BaseProduct {
   id: string;
-  name: string;
-  subtitle: string;
-  description: string;
-  price: number;
-  cookieCount: number;
-  flavours: string[];
+  category: ProductCategory;
+  illustration: ProductIllustration;
+  name: LocalizedText;
+  subtitle: LocalizedText;
+  description: LocalizedText;
+  flavours: LocalizedText[];
   allergens: string[];
   available: boolean;
-  badge?: string;
+  badge?: LocalizedText;
+  sectionLabel?: LocalizedText;
+  limitedNote?: LocalizedText;
+  ctaLabel: LocalizedText;
+}
+
+export interface OrderableProduct extends BaseProduct {
+  category: 'core' | 'drop' | 'special';
+  ctaMode: 'order';
+  price: number;
+  cookieCount: number;
+}
+
+export interface SubscriptionProduct extends BaseProduct {
+  category: 'subscription';
+  ctaMode: 'interest';
+  teaserBullets: LocalizedText[];
+  interestMessage: LocalizedText;
+}
+
+export type Product = OrderableProduct | SubscriptionProduct;
+
+export function isOrderableProduct(product: Product): product is OrderableProduct {
+  return product.ctaMode === 'order';
+}
+
+export function isSubscriptionProduct(product: Product): product is SubscriptionProduct {
+  return product.category === 'subscription';
 }
 
 export interface DeliverySlot {
   id: string;
-  label: string;
-  dateLabel: string;
+  label: LocalizedText;
+  dateLabel: LocalizedText;
   remaining: number;
   total: number;
 }

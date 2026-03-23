@@ -47,6 +47,37 @@ body {
   .rounded-drawn {
     border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
   }
+  .seasonal-overlay {
+    --season-accent: var(--orange);
+    --season-accent-soft: var(--honey);
+    --season-accent-deep: var(--terracotta);
+    --season-paper: #fff2e3;
+    --season-card: #fff7ef;
+    --season-card-strong: #f9e8d8;
+    --season-shadow: rgba(42, 20, 8, 0.28);
+    --season-glow: rgba(232, 114, 58, 0.14);
+    --season-mist: rgba(245, 192, 132, 0.22);
+    --season-line: rgba(122, 62, 32, 0.2);
+  }
+  .seasonal-campaign-bg {
+    background:
+      radial-gradient(circle at top left, var(--season-glow), transparent 34%),
+      radial-gradient(circle at 88% 14%, var(--season-mist), transparent 28%),
+      linear-gradient(180deg, var(--season-paper) 0%, var(--cream) 100%);
+  }
+  .seasonal-club-bg {
+    background:
+      radial-gradient(circle at 18% 18%, var(--season-glow), transparent 30%),
+      radial-gradient(circle at 84% 82%, var(--season-mist), transparent 30%),
+      linear-gradient(160deg, var(--season-card) 0%, #fffdf8 100%);
+  }
+  .seasonal-grain {
+    background-image:
+      radial-gradient(rgba(122, 62, 32, 0.04) 0.7px, transparent 0.7px),
+      radial-gradient(rgba(255, 255, 255, 0.4) 0.8px, transparent 0.8px);
+    background-position: 0 0, 14px 12px;
+    background-size: 18px 18px, 28px 28px;
+  }
   .animate-blob-breathe { animation: blob-breathe 6s ease-in-out infinite; }
   .animate-box-float { animation: box-float 4s ease-in-out infinite; }
   .animate-crumb-drift { animation: crumb-drift 3s ease-in-out infinite; }
@@ -56,6 +87,8 @@ body {
   .animate-confetti-blink { animation: confetti-blink 2s ease-in-out infinite; }
   .animate-stack-bob { animation: stack-bob 3s ease-in-out infinite; }
   .animate-top-wobble { animation: top-wobble 2.5s ease-in-out infinite; }
+  .animate-seasonal-sway { animation: seasonal-sway 7s ease-in-out infinite; }
+  .animate-seasonal-drift { animation: seasonal-drift 9s ease-in-out infinite; }
 }
 
 @keyframes blob-breathe {
@@ -98,4 +131,29 @@ body {
 @keyframes top-wobble {
   0%, 100% { transform: rotate(15deg) translateX(0); }
   50% { transform: rotate(8deg) translateX(-1px); }
+}
+@keyframes seasonal-sway {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(6px) rotate(6deg); }
+}
+@keyframes seasonal-drift {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  35% { transform: translate3d(4px, -6px, 0) rotate(8deg); }
+  70% { transform: translate3d(-3px, -10px, 0) rotate(-6deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-blob-breathe,
+  .animate-box-float,
+  .animate-crumb-drift,
+  .animate-bow-bounce,
+  .animate-heart-float,
+  .animate-cookie-wiggle,
+  .animate-confetti-blink,
+  .animate-stack-bob,
+  .animate-top-wobble,
+  .animate-seasonal-sway,
+  .animate-seasonal-drift {
+    animation: none !important;
+  }
 }

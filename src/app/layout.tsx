@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Caveat, DM_Sans } from 'next/font/google';
+import { I18nProvider } from '@/lib/i18n';
 import '@/styles/globals.css';
 
 const caveat = Caveat({
@@ -49,7 +50,7 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" className={`${caveat.variable} ${dmSans.variable}`}>
       <body className="antialiased font-body bg-cream text-ink">
-        {children}
+        <I18nProvider>{children}</I18nProvider>
       </body>
     </html>
   );

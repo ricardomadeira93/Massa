@@ -3,45 +3,26 @@
 import { motion } from 'framer-motion';
 import { siteConfig } from '@/lib/data';
 import { Crumb4, Scribble2, Trail2, Trail3 } from '@/components/decorative';
+import { useI18n } from '@/lib/i18n';
 import { drawIn, revealScale, revealUp, storyViewport } from '@/lib/storytelling';
 
-const steps = [
-  {
-    num: '1',
-    title: 'Escolha sua caixa',
-    desc: 'Veja o cardápio e escolha os sabores da sua caixa.',
-  },
-  {
-    num: '2',
-    title: 'Envie via WhatsApp',
-    desc: 'Preencha o formulário e envie seu pedido por WhatsApp.',
-  },
-  {
-    num: '3',
-    title: 'Pague no Pix',
-    desc: 'Nós confirmamos os detalhes e enviamos a chave Pix.',
-  },
-  {
-    num: '4',
-    title: 'Receba na porta',
-    desc: 'Entregamos na sua porta no horário marcado.',
-  },
-];
-
 export function HowItWorks() {
+  const { copy, t } = useI18n();
+  const steps = copy.howItWorks.steps;
+
   return (
-    <section id="como-funciona" className="relative overflow-hidden border-y border-sand bg-white px-6 py-20">
+    <section id="como-funciona" className="relative scroll-mt-44 overflow-hidden border-y border-sand bg-white px-5 py-16 sm:px-6 sm:py-20">
       <div className="mx-auto max-w-7xl">
-        <motion.div initial="hidden" whileInView="visible" viewport={storyViewport} className="mb-16 text-center">
+        <motion.div initial="hidden" whileInView="visible" viewport={storyViewport} className="mb-10 text-left sm:mb-16 sm:text-center">
           <motion.h2 variants={revealUp(0)} className="mb-3 font-display text-4xl font-bold tracking-tight text-ink">
-            Como funciona?
+            {copy.howItWorks.title}
           </motion.h2>
-          <motion.p variants={revealUp(0.08, 16)} className="font-body text-lg text-ink-muted">
-            Tudo feito de forma simples pelo WhatsApp.
+          <motion.p variants={revealUp(0.08, 16)} className="font-body text-base leading-relaxed text-ink-muted sm:text-lg">
+            {copy.howItWorks.description}
           </motion.p>
         </motion.div>
 
-        <div className="relative z-10 mb-16 grid grid-cols-2 gap-8 md:grid-cols-4">
+        <div className="relative z-10 mb-12 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:mb-16 lg:grid-cols-4 lg:gap-8">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -65,7 +46,7 @@ export function HowItWorks() {
               whileInView="visible"
               viewport={storyViewport}
               variants={revealUp(index * 0.08, 18)}
-              className="group/step relative flex cursor-default flex-col items-center rounded-drawn border-[3px] border-ink bg-cream p-6 text-center shadow-[4px_4px_0_var(--ink)] transition-all hover:-translate-y-1 hover:-rotate-1 hover:shadow-[6px_6px_0_var(--orange)]"
+              className="group/step relative flex cursor-default flex-col items-start rounded-drawn border-[3px] border-ink bg-cream p-5 text-left shadow-[4px_4px_0_var(--ink)] transition-all hover:-translate-y-1 hover:shadow-[6px_6px_0_var(--orange)] sm:items-center sm:p-6 sm:text-center lg:hover:-rotate-1"
             >
               <div className="pointer-events-none absolute right-4 top-4 opacity-50 transition-transform duration-300 group-hover/step:-translate-y-1 group-hover/step:rotate-6 group-hover/step:opacity-90">
                 <Scribble2 className="h-6 w-6" strokeColor="var(--terracotta)" strokeWidth={3} />
@@ -88,9 +69,9 @@ export function HowItWorks() {
           whileInView="visible"
           viewport={storyViewport}
           variants={revealUp(0.12, 14)}
-          className="mx-auto max-w-sm text-center text-xs text-ink-faint"
+          className="mx-auto max-w-md text-left text-xs leading-relaxed text-ink-faint sm:text-center"
         >
-          {siteConfig.orderCutoffNote}
+          {t(siteConfig.orderCutoffNote)}
         </motion.p>
 
         <motion.div

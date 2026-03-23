@@ -4,44 +4,52 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/Button';
 import { BakerHero } from '@/components/icons/DoodleIcons';
 import { Arrow2, Crumb1, Chunk2, Sparkle1, Sparkle3, Swirl2, Trail3 } from '@/components/decorative';
+import { SeasonalBanner } from '@/components/sections/SeasonalBanner';
 import { siteConfig } from '@/lib/data';
+import { useI18n } from '@/lib/i18n';
 import { drawIn, revealScale, revealUp, storyViewport } from '@/lib/storytelling';
 
 export function Hero() {
+  const { copy, t } = useI18n();
+
   return (
-    <section className="relative flex min-h-screen flex-col justify-center overflow-hidden bg-cream pt-20">
-      <div className="relative z-10 mx-auto grid w-full max-w-7xl flex-1 grid-cols-1 items-center gap-16 px-6 py-16 md:grid-cols-2">
+    <section className="relative flex min-h-[calc(100svh-3rem)] flex-col justify-center overflow-hidden bg-cream pt-[172px] md:min-h-screen md:pt-32">
+      <div className="relative z-20 mx-auto w-full max-w-7xl px-5 pt-4 sm:px-6">
+        <SeasonalBanner />
+      </div>
+
+      <div className="relative z-10 mx-auto grid w-full max-w-7xl flex-1 grid-cols-1 items-center gap-10 px-5 py-10 sm:px-6 md:grid-cols-2 md:gap-16 md:py-14">
         <motion.div
           initial="hidden"
           animate="visible"
           variants={revealUp(0, 0)}
-          className="group/story-copy flex flex-col items-start gap-6 order-2 pt-8 md:order-1 md:pt-0"
+          className="group/story-copy flex flex-col items-start gap-5 pt-2 md:pt-0"
         >
           <motion.div
             variants={revealScale(0.05)}
             className="inline-flex rotate-2 items-center border-[3px] border-ink bg-butter px-4 py-1.5 font-display text-sm font-medium tracking-wide text-orange shadow-[3px_3px_0_var(--ink)]"
           >
-            Cookies artesanais · Fim de semana
+            {copy.hero.badge}
           </motion.div>
 
           <div className="relative">
             <motion.h1
               variants={revealUp(0.12, 16)}
               className="font-display font-bold leading-[1.1] text-ink"
-              style={{ fontSize: 'clamp(3rem, 6vw, 5.5rem)' }}
+              style={{ fontSize: 'clamp(2.75rem, 11vw, 5.5rem)' }}
             >
-              Feito com{' '}
+              {copy.hero.titlePrefix}{' '}
               <span className="relative inline-block text-orange">
-                amor,
+                {copy.hero.titleHighlight}
                 <motion.span
                   variants={drawIn(0.35)}
-                  className="absolute -bottom-6 left-0 block w-[120%] -translate-x-[10%]"
+                  className="absolute -bottom-5 left-0 block w-[120%] -translate-x-[10%] md:-bottom-6"
                 >
                   <Swirl2 className="h-8 w-full" strokeColor="var(--caramel)" strokeWidth={3} />
                 </motion.span>
               </span>
               <br />
-              entregue na sua porta.
+              {copy.hero.titleSuffix}
             </motion.h1>
 
             <motion.div
@@ -54,28 +62,28 @@ export function Hero() {
 
           <motion.p
             variants={revealUp(0.2, 18)}
-            className="max-w-sm font-body text-lg font-light leading-relaxed text-ink-muted"
+            className="max-w-md font-body text-base leading-relaxed text-ink-muted sm:text-lg"
           >
-            {siteConfig.subTagline}
+            {t(siteConfig.subTagline)}
           </motion.p>
 
-          <motion.div variants={revealUp(0.28, 18)} className="mt-4 flex flex-wrap items-center gap-6">
-            <div className="group/hero-cta relative">
-              <Button href="#pedido" variant="solid-dark" className="px-8 text-lg">
-                Fazer pedido &rarr;
+          <motion.div variants={revealUp(0.28, 18)} className="mt-2 flex w-full flex-col gap-3 sm:mt-4 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
+            <div className="group/hero-cta relative w-full sm:w-auto">
+              <Button href="#pedido" variant="solid-dark" className="w-full px-8 text-base sm:w-auto sm:text-lg">
+                {copy.hero.primaryCta} &rarr;
               </Button>
               <div className="pointer-events-none absolute -right-10 top-1/2 hidden -translate-y-1/2 opacity-0 transition-all duration-300 group-hover/hero-cta:translate-x-2 group-hover/hero-cta:opacity-100 group-focus-within/hero-cta:translate-x-2 group-focus-within/hero-cta:opacity-100 md:block">
                 <Arrow2 className="h-10 w-10" strokeColor="var(--terracotta)" />
               </div>
             </div>
 
-            <Button href="#produtos" variant="ghost" className="px-0 text-base">
-              Ver cardápio
+            <Button href="#produtos" variant="ghost" className="w-full justify-center px-5 text-base sm:w-auto">
+              {copy.hero.secondaryCta}
             </Button>
           </motion.div>
 
-          <motion.p variants={revealUp(0.34, 14)} className="mt-8 text-xs text-ink-faint">
-            {siteConfig.deliveryNote}
+          <motion.p variants={revealUp(0.34, 14)} className="mt-4 text-xs leading-relaxed text-ink-faint sm:mt-6">
+            {t(siteConfig.deliveryNote)}
           </motion.p>
         </motion.div>
 
@@ -83,10 +91,10 @@ export function Hero() {
           initial="hidden"
           animate="visible"
           variants={revealScale(0.12, 0.96)}
-          className="group/hero-illustration relative order-1 flex h-[45vh] items-center justify-center md:order-2 md:h-[65vh]"
+          className="group/hero-illustration relative order-2 flex h-[34vh] min-h-[260px] max-h-[360px] items-center justify-center md:h-[65vh] md:max-h-none"
         >
           <div className="z-10 transition-transform duration-500 group-hover/hero-illustration:-translate-y-2 group-hover/hero-illustration:rotate-1">
-            <BakerHero size={260} className="h-[260px] w-[260px] text-ink md:h-[320px] md:w-[320px]" />
+            <BakerHero size={240} className="h-[220px] w-[220px] text-ink sm:h-[250px] sm:w-[250px] md:h-[320px] md:w-[320px]" />
           </div>
 
           <div className="pointer-events-none absolute inset-0 -z-10">
@@ -94,18 +102,18 @@ export function Hero() {
               variants={revealScale(0.28, 0.8)}
               initial="hidden"
               animate="visible"
-              className="absolute left-[5%] top-[10%] opacity-80 transition-transform duration-300 group-hover/hero-illustration:-translate-y-1 group-hover/hero-illustration:rotate-6 md:-left-[20%]"
+              className="absolute left-[8%] top-[12%] opacity-80 transition-transform duration-300 group-hover/hero-illustration:-translate-y-1 group-hover/hero-illustration:rotate-6 md:-left-[20%]"
             >
-              <Sparkle1 className="h-10 w-10 md:h-16 md:w-16" fillColor="var(--butter)" strokeColor="var(--orange)" />
+              <Sparkle1 className="h-8 w-8 sm:h-10 sm:w-10 md:h-16 md:w-16" fillColor="var(--butter)" strokeColor="var(--orange)" />
             </motion.div>
 
             <motion.div
               variants={revealUp(0.34, 18)}
               initial="hidden"
               animate="visible"
-              className="absolute bottom-[20%] right-[10%] opacity-90 transition-transform duration-300 group-hover/hero-illustration:-translate-y-2 group-hover/hero-illustration:-rotate-6 md:-right-[5%]"
+              className="absolute bottom-[18%] right-[12%] opacity-90 transition-transform duration-300 group-hover/hero-illustration:-translate-y-2 group-hover/hero-illustration:-rotate-6 md:-right-[5%]"
             >
-              <Chunk2 className="h-10 w-10 md:h-14 md:w-14" fillColor="var(--honey)" />
+              <Chunk2 className="h-8 w-8 sm:h-10 sm:w-10 md:h-14 md:w-14" fillColor="var(--honey)" />
             </motion.div>
 
             <motion.div

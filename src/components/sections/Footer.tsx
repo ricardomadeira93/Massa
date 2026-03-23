@@ -4,9 +4,12 @@ import { motion } from 'framer-motion';
 import { CookieMark, IconInstagram, IconPhone } from '@/components/icons/DoodleIcons';
 import { Chunk1, Crumb2, Heart1, Sparkle1, Trail1 } from '@/components/decorative';
 import { siteConfig } from '@/lib/data';
+import { useI18n } from '@/lib/i18n';
 import { drawIn, revealScale, revealUp, storyViewport } from '@/lib/storytelling';
 
 export function Footer() {
+  const { copy, t } = useI18n();
+
   return (
     <footer className="relative overflow-hidden bg-ink text-cream">
       <motion.div
@@ -43,7 +46,7 @@ export function Footer() {
         </motion.div>
       </div>
 
-      <div className="relative z-10 mx-auto grid max-w-7xl grid-cols-1 gap-10 border-b border-ink-muted/20 px-6 py-16 md:grid-cols-3">
+      <div className="relative z-10 mx-auto grid max-w-7xl grid-cols-1 gap-8 border-b border-ink-muted/20 px-5 py-14 sm:px-6 md:grid-cols-3 md:gap-10 md:py-16">
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -55,8 +58,8 @@ export function Footer() {
             <CookieMark size={36} color="var(--cream)" />
             <span className="mt-1 font-display text-3xl font-bold">Massa</span>
           </div>
-          <p className="max-w-[200px] whitespace-pre-line text-sm leading-relaxed text-ink-faint">
-            {siteConfig.tagline}
+          <p className="max-w-[220px] whitespace-pre-line text-sm leading-relaxed text-ink-faint">
+            {t(siteConfig.tagline)}
           </p>
           <div className="pointer-events-none absolute -right-2 top-0 hidden opacity-70 transition-transform duration-300 group-hover/footer-brand:-translate-y-1 group-hover/footer-brand:rotate-6 md:block">
             <Sparkle1 className="h-7 w-7" fillColor="var(--honey)" strokeColor="var(--butter)" />
@@ -70,18 +73,18 @@ export function Footer() {
           variants={revealUp(0.08, 16)}
           className="group/footer-nav relative flex flex-col gap-3 pt-2 md:pt-4"
         >
-          <h4 className="mb-2 font-display text-xl font-bold tracking-wide text-orange">Navegue</h4>
+          <h4 className="mb-2 font-display text-xl font-bold tracking-wide text-orange">{copy.footer.navigate}</h4>
           <div className="pointer-events-none absolute -left-2 top-8 hidden opacity-60 md:block">
             <Trail1 className="h-6 w-24" strokeColor="var(--honey)" strokeWidth={2} />
           </div>
-          <a href="#produtos" className="flex min-h-[44px] w-fit items-center rounded-sm py-1 text-ink-faint outline-none transition-colors hover:text-cream focus-visible:ring-2 focus-visible:ring-orange">
-            Cardápio
+          <a href="#produtos" className="flex min-h-[44px] w-full items-center rounded-pill border border-ink-muted/20 px-4 py-2 text-ink-faint outline-none transition-colors hover:border-orange/40 hover:text-cream focus-visible:ring-2 focus-visible:ring-orange sm:w-fit sm:border-0 sm:px-0 sm:py-1">
+            {copy.footer.menu}
           </a>
-          <a href="#como-funciona" className="flex min-h-[44px] w-fit items-center rounded-sm py-1 text-ink-faint outline-none transition-colors hover:text-cream focus-visible:ring-2 focus-visible:ring-orange">
-            Como funciona
+          <a href="#como-funciona" className="flex min-h-[44px] w-full items-center rounded-pill border border-ink-muted/20 px-4 py-2 text-ink-faint outline-none transition-colors hover:border-orange/40 hover:text-cream focus-visible:ring-2 focus-visible:ring-orange sm:w-fit sm:border-0 sm:px-0 sm:py-1">
+            {copy.footer.howItWorks}
           </a>
-          <a href="#faq" className="flex min-h-[44px] w-fit items-center rounded-sm py-1 text-ink-faint outline-none transition-colors hover:text-cream focus-visible:ring-2 focus-visible:ring-orange">
-            Dúvidas Frequentes
+          <a href="#faq" className="flex min-h-[44px] w-full items-center rounded-pill border border-ink-muted/20 px-4 py-2 text-ink-faint outline-none transition-colors hover:border-orange/40 hover:text-cream focus-visible:ring-2 focus-visible:ring-orange sm:w-fit sm:border-0 sm:px-0 sm:py-1">
+            {copy.footer.faq}
           </a>
         </motion.div>
 
@@ -92,7 +95,7 @@ export function Footer() {
           variants={revealUp(0.16, 16)}
           className="group/footer-contact relative flex flex-col gap-3 pt-2 md:pt-4"
         >
-          <h4 className="mb-2 font-display text-xl font-bold tracking-wide text-orange">Fale com a gente</h4>
+          <h4 className="mb-2 font-display text-xl font-bold tracking-wide text-orange">{copy.footer.contact}</h4>
           <div className="pointer-events-none absolute right-4 top-8 hidden opacity-70 transition-transform duration-300 group-hover/footer-contact:-translate-y-1 group-hover/footer-contact:translate-x-1 md:block">
             <Crumb2 className="h-3 w-3" fillColor="var(--honey)" strokeColor="var(--butter)" />
           </div>
@@ -100,19 +103,19 @@ export function Footer() {
             href={siteConfig.instagramUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="group flex min-h-[44px] w-fit items-center gap-3 rounded-sm pr-4 text-ink-faint outline-none transition-colors hover:text-cream focus-visible:ring-2 focus-visible:ring-orange"
+            className="group flex min-h-[44px] w-full items-center gap-3 rounded-pill border border-ink-muted/20 px-4 py-2 text-ink-faint outline-none transition-colors hover:border-orange/40 hover:text-cream focus-visible:ring-2 focus-visible:ring-orange sm:w-fit sm:border-0 sm:px-0"
           >
             <IconInstagram size={28} className="shrink-0 text-orange transition-transform group-hover:-rotate-6" />
-            <span className="group-hover:underline">Instagram</span>
+            <span className="group-hover:underline">{copy.footer.instagram}</span>
           </a>
           <a
             href={`https://wa.me/${siteConfig.whatsappNumber}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="group flex min-h-[44px] w-fit items-center gap-3 rounded-sm pr-4 text-ink-faint outline-none transition-colors hover:text-cream focus-visible:ring-2 focus-visible:ring-orange"
+            className="group flex min-h-[44px] w-full items-center gap-3 rounded-pill border border-ink-muted/20 px-4 py-2 text-ink-faint outline-none transition-colors hover:border-orange/40 hover:text-cream focus-visible:ring-2 focus-visible:ring-orange sm:w-fit sm:border-0 sm:px-0"
           >
             <IconPhone size={28} className="shrink-0 text-orange transition-transform group-hover:rotate-6" />
-            <span className="group-hover:underline">WhatsApp</span>
+            <span className="group-hover:underline">{copy.footer.whatsapp}</span>
           </a>
         </motion.div>
       </div>
@@ -122,10 +125,10 @@ export function Footer() {
         whileInView="visible"
         viewport={storyViewport}
         variants={revealUp(0.22, 12)}
-        className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-6 py-6 text-center"
+        className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-5 py-6 text-center sm:px-6"
       >
-        <p className="mb-2 w-full text-xs text-ink-faint/60">{siteConfig.allergenStatement}</p>
-        <p className="text-xs text-ink-faint">© {new Date().getFullYear()} Massa Cookies. Todos os direitos reservados.</p>
+        <p className="mb-2 w-full text-xs text-ink-faint/60">{t(siteConfig.allergenStatement)}</p>
+        <p className="text-xs text-ink-faint">{copy.footer.rights(new Date().getFullYear())}</p>
       </motion.div>
     </footer>
   );
