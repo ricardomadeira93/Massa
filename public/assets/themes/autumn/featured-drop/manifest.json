@@ -1,0 +1,106 @@
+{
+  "autumn-main": {
+    "label": "Main default drop illustration",
+    "source": "assets-autumn.svg",
+    "viewBox": [
+      430,
+      175,
+      360,
+      350
+    ],
+    "pathCount": 116,
+    "file": "public/assets/themes/autumn/featured-drop/autumn-main.svg",
+    "description": "Primary autumn campaign illustration extracted from the top-center cluster."
+  },
+  "autumn-flavor-cinnamon": {
+    "label": "Flavor preview illustration - cinnamon",
+    "source": "assets-autumn.svg",
+    "viewBox": [
+      550,
+      610,
+      170,
+      190
+    ],
+    "pathCount": 48,
+    "file": "public/assets/themes/autumn/featured-drop/autumn-flavor-cinnamon.svg",
+    "description": "Warm spice-shaped autumn illustration from the lower-middle-right cluster."
+  },
+  "autumn-flavor-chocolate": {
+    "label": "Flavor preview illustration - chocolate",
+    "source": "assets-autumn.svg",
+    "viewBox": [
+      315,
+      600,
+      190,
+      210
+    ],
+    "pathCount": 19,
+    "file": "public/assets/themes/autumn/featured-drop/autumn-flavor-chocolate.svg",
+    "description": "Rounded chocolate-style autumn illustration from the lower-middle-left cluster."
+  },
+  "autumn-flavor-leaf": {
+    "label": "Flavor preview illustration - leaf",
+    "source": "assets-autumn.svg",
+    "viewBox": [
+      65,
+      635,
+      190,
+      170
+    ],
+    "pathCount": 62,
+    "file": "public/assets/themes/autumn/featured-drop/autumn-flavor-leaf.svg",
+    "description": "Leaf-like autumn illustration from the lower-left cluster."
+  },
+  "autumn-flavor-nut": {
+    "label": "Flavor preview illustration - nut",
+    "source": "assets-autumn.svg",
+    "viewBox": [
+      790,
+      635,
+      180,
+      160
+    ],
+    "pathCount": 52,
+    "file": "public/assets/themes/autumn/featured-drop/autumn-flavor-nut.svg",
+    "description": "Nut-like autumn illustration from the lower-right cluster."
+  },
+  "autumn-motif-seed": {
+    "label": "Supporting motif - seed",
+    "source": "assets-autumn.svg",
+    "viewBox": [
+      450,
+      80,
+      150,
+      150
+    ],
+    "pathCount": 9,
+    "file": "public/assets/themes/autumn/featured-drop/autumn-motif-seed.svg",
+    "description": "Small reusable seed-like motif from the upper-middle cluster."
+  },
+  "autumn-motif-sprig": {
+    "label": "Supporting motif - sprig",
+    "source": "assets-autumn.svg",
+    "viewBox": [
+      360,
+      150,
+      120,
+      110
+    ],
+    "pathCount": 20,
+    "file": "public/assets/themes/autumn/featured-drop/autumn-motif-sprig.svg",
+    "description": "Small reusable sprig motif from the upper-left cluster."
+  },
+  "autumn-motif-spark": {
+    "label": "Supporting motif - spark",
+    "source": "assets-autumn.svg",
+    "viewBox": [
+      660,
+      110,
+      150,
+      100
+    ],
+    "pathCount": 9,
+    "file": "public/assets/themes/autumn/featured-drop/autumn-motif-spark.svg",
+    "description": "Small reusable spark/callout motif from the upper-right cluster."
+  }
+}
