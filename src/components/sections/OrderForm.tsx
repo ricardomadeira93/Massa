@@ -39,6 +39,7 @@ function OrderFormContent() {
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const formSectionClass = 'rounded-drawn border-[3px] border-ink bg-cream/55 p-4 shadow-[4px_4px_0_var(--ink)] sm:p-5';
 
   useEffect(() => {
     const produto = searchParams.get('produto');
@@ -105,7 +106,7 @@ function OrderFormContent() {
 
   const getInputStyles = (errName: string) => `
     w-full appearance-none bg-white border-[3px] rounded-drawn px-4 py-3.5 text-base text-ink min-h-[52px]
-    transition-all outline-none placeholder:text-ink-faint shadow-[3px_3px_0_var(--ink)]
+    transition-all outline-none placeholder:text-ink-muted shadow-[3px_3px_0_var(--ink)]
     focus:-translate-y-1
     ${errors[errName] ? 'border-terracotta ring-2 ring-terracotta focus:shadow-[4px_4px_0_var(--terracotta)]' : 'border-ink focus:border-orange focus:shadow-[4px_4px_0_var(--orange)]'}
   `;
@@ -116,7 +117,7 @@ function OrderFormContent() {
   });
 
   return (
-    <section id="pedido" className="relative scroll-mt-44 overflow-hidden border-y border-sand bg-cream px-5 py-16 sm:px-6 sm:py-20">
+    <section id="pedido" className="relative scroll-mt-44 overflow-hidden border-y border-sand bg-cream px-5 py-14 sm:px-6 sm:py-20">
       <div className="relative mx-auto max-w-3xl">
         <motion.div
           initial="hidden"
@@ -128,7 +129,7 @@ function OrderFormContent() {
           <Swirl2 strokeColor="var(--caramel)" strokeWidth={3} className="h-24 w-24" />
         </motion.div>
 
-        <motion.div initial="hidden" whileInView="visible" viewport={storyViewport} className="mb-10 text-left sm:mb-12 sm:text-center">
+        <motion.div initial="hidden" whileInView="visible" viewport={storyViewport} className="mb-8 text-left sm:mb-12 sm:text-center">
           <div className="relative inline-block">
             <motion.h2 variants={revealUp(0)} className="mb-3 font-display text-4xl font-bold tracking-tight text-ink">
               {copy.orderForm.title}
@@ -137,7 +138,7 @@ function OrderFormContent() {
               <Trail1 className="h-6 w-full" strokeColor="var(--terracotta)" strokeWidth={2.5} />
             </motion.div>
           </div>
-          <motion.p variants={revealUp(0.08, 16)} className="font-body text-base leading-relaxed text-ink-muted sm:text-lg">
+          <motion.p variants={revealUp(0.08, 16)} className="font-body text-base leading-relaxed text-ink sm:text-lg">
             {copy.orderForm.description}
           </motion.p>
         </motion.div>
@@ -148,12 +149,12 @@ function OrderFormContent() {
           viewport={storyViewport}
           variants={revealUp(0.12, 18)}
           onSubmit={handleSubmit}
-          className="space-y-8 rounded-drawn border-[3px] border-ink bg-white/45 p-5 shadow-[5px_5px_0_var(--ink)] sm:p-6 md:p-8"
+          className="space-y-6 rounded-drawn border-[3px] border-ink bg-white/45 p-4 shadow-[5px_5px_0_var(--ink)] sm:space-y-8 sm:p-6 md:p-8"
           noValidate
         >
-          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-6">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6">
             <div className="space-y-1">
-              <label htmlFor="field-name" className="ml-1 text-sm font-semibold text-ink-muted">
+              <label htmlFor="field-name" className="ml-1 text-sm font-semibold text-ink">
                 {copy.orderForm.fields.name}
               </label>
               <input
@@ -171,7 +172,7 @@ function OrderFormContent() {
             </div>
 
             <div className="space-y-1">
-              <label htmlFor="field-phone" className="ml-1 text-sm font-semibold text-ink-muted">
+              <label htmlFor="field-phone" className="ml-1 text-sm font-semibold text-ink">
                 {copy.orderForm.fields.phone}
               </label>
               <input
@@ -189,7 +190,7 @@ function OrderFormContent() {
             </div>
 
             <div className="space-y-1 md:col-span-2">
-              <label htmlFor="field-bloco" className="ml-1 text-sm font-semibold text-ink-muted">
+              <label htmlFor="field-bloco" className="ml-1 text-sm font-semibold text-ink">
                 {copy.orderForm.fields.bloco}
               </label>
               <input
@@ -206,8 +207,12 @@ function OrderFormContent() {
               {errors.bloco && <p id="error-bloco" role="alert" className="ml-1 mt-1 text-xs font-medium text-red-500">{errors.bloco}</p>}
             </div>
 
-            <div className="space-y-1 md:col-span-2">
-              <label htmlFor="field-productId" className="ml-1 text-sm font-semibold text-ink-muted">
+            <div className={`space-y-3 md:col-span-2 ${formSectionClass}`}>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-widest text-ink-muted">{copy.orderForm.steps.product}</p>
+                <p className="mt-1 text-sm leading-relaxed text-ink-muted">{copy.orderForm.helpers.product}</p>
+              </div>
+              <label htmlFor="field-productId" className="ml-1 text-sm font-semibold text-ink">
                 {copy.orderForm.fields.product}
               </label>
               <select
@@ -237,13 +242,17 @@ function OrderFormContent() {
                 )}
               </select>
               {showSubscriptionNote ? (
-                <p className="ml-1 text-xs leading-relaxed text-ink-faint">{copy.orderForm.subscriptionNote}</p>
+                <p className="ml-1 text-xs leading-relaxed text-ink-muted">{copy.orderForm.subscriptionNote}</p>
               ) : null}
               {errors.productId && <p id="error-productId" role="alert" className="ml-1 mt-1 text-xs font-medium text-red-500">{errors.productId}</p>}
             </div>
 
-            <div className="space-y-2 md:col-span-2" id="field-slotId">
-              <label className="ml-1 mb-1 block text-sm font-semibold text-ink-muted">{copy.orderForm.fields.deliverySlot}</label>
+            <div className={`space-y-3 md:col-span-2 ${formSectionClass}`} id="field-slotId">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-widest text-ink-muted">{copy.orderForm.steps.slot}</p>
+                <p className="mt-1 text-sm leading-relaxed text-ink-muted">{copy.orderForm.helpers.slot}</p>
+              </div>
+              <label className="ml-1 mb-1 block text-sm font-semibold text-ink">{copy.orderForm.fields.deliverySlot}</label>
               <SlotSelector
                 slots={deliverySlots}
                 selectedId={formData.slotId}
@@ -253,39 +262,46 @@ function OrderFormContent() {
               {errors.slotId && <p id="error-slotId" role="alert" className="ml-1 text-xs font-medium text-red-500">{errors.slotId}</p>}
             </div>
 
-            <div className="space-y-1 md:col-span-2">
-              <label htmlFor="field-flavourNote" className="ml-1 text-sm font-semibold text-ink-muted">
-                {copy.orderForm.fields.flavourNote} <span className="font-normal opacity-70">({copy.common.optional})</span>
-              </label>
-              <textarea
-                id="field-flavourNote"
-                name="flavourNote"
-                rows={2}
-                placeholder={copy.orderForm.fields.flavourPlaceholder}
-                value={formData.flavourNote}
-                onChange={handleChange}
-                className={getInputStyles('flavourNote')}
-                {...getFieldA11y('flavourNote')}
-              />
+            <div className={`grid gap-4 md:col-span-2 ${formSectionClass}`}>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-widest text-ink-muted">{copy.orderForm.steps.notes}</p>
+                <p className="mt-1 text-sm leading-relaxed text-ink-muted">{copy.orderForm.helpers.notes}</p>
+              </div>
+              <div className="space-y-1">
+                <label htmlFor="field-flavourNote" className="ml-1 text-sm font-semibold text-ink">
+                  {copy.orderForm.fields.flavourNote} <span className="font-normal text-ink-muted">({copy.common.optional})</span>
+                </label>
+                <textarea
+                  id="field-flavourNote"
+                  name="flavourNote"
+                  rows={2}
+                  placeholder={copy.orderForm.fields.flavourPlaceholder}
+                  value={formData.flavourNote}
+                  onChange={handleChange}
+                  className={getInputStyles('flavourNote')}
+                  {...getFieldA11y('flavourNote')}
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label htmlFor="field-allergyNote" className="ml-1 text-sm font-semibold text-ink">
+                  {copy.orderForm.fields.allergyNote} <span className="font-normal text-ink-muted">({copy.common.optional})</span>
+                </label>
+                <input
+                  id="field-allergyNote"
+                  name="allergyNote"
+                  type="text"
+                  placeholder={copy.orderForm.fields.allergyPlaceholder}
+                  value={formData.allergyNote}
+                  onChange={handleChange}
+                  className={getInputStyles('allergyNote')}
+                  {...getFieldA11y('allergyNote')}
+                />
+              </div>
             </div>
 
-            <div className="space-y-1 md:col-span-2">
-              <label htmlFor="field-allergyNote" className="ml-1 text-sm font-semibold text-ink-muted">
-                {copy.orderForm.fields.allergyNote} <span className="font-normal opacity-70">({copy.common.optional})</span>
-              </label>
-              <input
-                id="field-allergyNote"
-                name="allergyNote"
-                type="text"
-                placeholder={copy.orderForm.fields.allergyPlaceholder}
-                value={formData.allergyNote}
-                onChange={handleChange}
-                className={getInputStyles('allergyNote')}
-                {...getFieldA11y('allergyNote')}
-              />
-            </div>
-
-            <div className="relative mt-2 space-y-4 rounded-drawn border-[3px] border-ink bg-butter/50 p-5 shadow-[4px_4px_0_var(--ink)] md:col-span-2 md:p-6">
+            <div className="relative mt-1 space-y-4 rounded-drawn border-[3px] border-ink bg-butter/50 p-4 shadow-[4px_4px_0_var(--ink)] md:col-span-2 md:p-6">
+              <p className="text-xs font-semibold uppercase tracking-widest text-ink-muted">{copy.orderForm.steps.gift}</p>
               <motion.div
                 animate={{
                   opacity: formData.isGift ? 1 : 0.45,
@@ -317,7 +333,7 @@ function OrderFormContent() {
               {formData.isGift && (
                 <div className="animate-in slide-in-from-top-2 fade-in mt-4 grid gap-6 border-t border-sand/50 pt-4 duration-300">
                   <div className="space-y-1">
-                    <label htmlFor="field-giftRecipient" className="ml-1 text-sm font-semibold text-ink-muted">
+                    <label htmlFor="field-giftRecipient" className="ml-1 text-sm font-semibold text-ink">
                       {copy.orderForm.fields.giftRecipient}
                     </label>
                     <input
@@ -336,10 +352,10 @@ function OrderFormContent() {
 
                   <div className="space-y-1">
                     <div className="mb-1 flex items-baseline justify-between">
-                      <label htmlFor="field-giftMessage" className="ml-1 text-sm font-semibold text-ink-muted">
+                      <label htmlFor="field-giftMessage" className="ml-1 text-sm font-semibold text-ink">
                         {copy.orderForm.fields.giftMessage}
                       </label>
-                      <span className={`text-xs ${formData.giftMessage.length > 120 ? 'text-red-500' : 'text-ink-faint'}`}>
+                      <span className={`text-xs ${formData.giftMessage.length > 120 ? 'text-red-500' : 'text-ink-muted'}`}>
                         {formData.giftMessage.length}/120
                       </span>
                     </div>
@@ -360,10 +376,13 @@ function OrderFormContent() {
             </div>
           </div>
 
-          <div className="space-y-6 pt-4">
+          <div className="space-y-5 pt-2 sm:space-y-6 sm:pt-4">
             <AllergenBanner />
 
             <div className="group/submit relative">
+              <div className="mb-3 rounded-drawn border-[2px] border-sand bg-white/70 px-4 py-3 text-sm leading-relaxed text-ink">
+                {copy.orderForm.submitHelper}
+              </div>
               <Button type="submit" variant="solid-orange" className="w-full py-4 text-lg leading-none">
                 {copy.orderForm.submit}
               </Button>
@@ -406,7 +425,7 @@ export function OrderForm() {
     <Suspense
       fallback={
         <section id="pedido" className="flex min-h-[500px] items-center justify-center border-y border-sand bg-cream px-6 py-20">
-          <div className="font-display text-2xl text-ink-muted animate-pulse">{copy.orderForm.loading}</div>
+          <div className="font-display text-2xl text-ink animate-pulse">{copy.orderForm.loading}</div>
         </section>
       }
     >

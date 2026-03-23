@@ -49,7 +49,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR" className={`${caveat.variable} ${dmSans.variable}`}>
-      <body className="antialiased font-body bg-cream text-ink">
+      <body suppressHydrationWarning className="antialiased font-body bg-cream text-ink">
         <I18nProvider>{children}</I18nProvider>
       </body>
     </html>

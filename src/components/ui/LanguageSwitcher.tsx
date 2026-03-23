@@ -11,6 +11,8 @@ const tiltByLanguage = {
   pt: '-rotate-1',
   en: 'rotate-1',
   es: '-rotate-2',
+  it: 'rotate-1',
+  ar: '-rotate-1',
 } as const;
 
 export function LanguageSwitcher({ className = '' }: LanguageSwitcherProps) {
@@ -18,10 +20,10 @@ export function LanguageSwitcher({ className = '' }: LanguageSwitcherProps) {
 
   return (
     <div
-      className={`inline-flex items-center gap-1.5 rounded-pill border-[2px] border-ink bg-white/90 p-1.5 shadow-[3px_3px_0_var(--butter)] ${className}`}
+      className={`inline-flex items-center gap-0.5 rounded-pill border-2 border-ink bg-white/90 px-1.5 py-1 shadow-sm sm:gap-1 sm:px-3 sm:py-2 ${className}`}
       title={copy.language.helper}
     >
-      <span className="hidden pl-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-ink-faint lg:block">{copy.language.label}</span>
+      <span className="hidden pl-1 text-xs font-semibold uppercase tracking-widest text-ink-faint xl:block">{copy.language.label}</span>
       <div role="group" aria-label={copy.language.helper} className="inline-flex items-center gap-1">
         {supportedLanguages.map((option) => {
           const isActive = option === language;
@@ -34,9 +36,9 @@ export function LanguageSwitcher({ className = '' }: LanguageSwitcherProps) {
               aria-pressed={isActive}
               aria-label={languageMeta[option].label}
               title={languageMeta[option].label}
-              className={`relative min-h-[40px] min-w-[42px] rounded-pill border-[2px] px-3 text-xs font-bold tracking-[0.16em] uppercase transition-all focus-visible:ring-2 focus-visible:ring-orange/50 focus-visible:ring-offset-2 focus-visible:ring-offset-cream ${tiltByLanguage[option]} ${
+              className={`relative h-9 min-w-9 rounded-pill border-2 px-1.5 text-xs font-bold uppercase tracking-widest transition-all focus-visible:ring-2 focus-visible:ring-orange/50 focus-visible:ring-offset-2 focus-visible:ring-offset-cream sm:h-10 sm:min-w-11 sm:px-3 ${tiltByLanguage[option]} ${
                 isActive
-                  ? 'border-ink bg-terracotta text-cream shadow-[2px_2px_0_var(--ink)]'
+                  ? 'border-ink bg-terracotta text-cream shadow-sm'
                   : 'border-sand bg-cream/90 text-ink-muted hover:-translate-y-0.5 hover:border-orange/40 hover:bg-butter/70 hover:text-ink'
               }`}
             >

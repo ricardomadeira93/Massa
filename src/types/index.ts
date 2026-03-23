@@ -1,5 +1,5 @@
-export type Language = 'pt' | 'en' | 'es';
-export type LocalizedText = Record<Language, string>;
+export type Language = 'pt' | 'en' | 'es' | 'it' | 'ar';
+export type LocalizedText = Partial<Record<Language, string>> & Record<'pt', string>;
 
 export type ProductCategory = 'core' | 'drop' | 'special' | 'subscription';
 export type ProductCtaMode = 'order' | 'interest';

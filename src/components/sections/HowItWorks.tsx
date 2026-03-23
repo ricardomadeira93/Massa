@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { siteConfig } from '@/lib/data';
-import { Crumb4, Scribble2, Trail2, Trail3 } from '@/components/decorative';
+import { Scribble2, Trail3 } from '@/components/decorative';
 import { useI18n } from '@/lib/i18n';
 import { drawIn, revealScale, revealUp, storyViewport } from '@/lib/storytelling';
 
@@ -11,34 +11,23 @@ export function HowItWorks() {
   const steps = copy.howItWorks.steps;
 
   return (
-    <section id="como-funciona" className="relative scroll-mt-44 overflow-hidden border-y border-sand bg-white px-5 py-16 sm:px-6 sm:py-20">
+    <section id="como-funciona" className="relative scroll-mt-44 overflow-hidden border-y border-sand bg-cream px-5 py-12 sm:px-6 sm:py-16">
       <div className="mx-auto max-w-7xl">
-        <motion.div initial="hidden" whileInView="visible" viewport={storyViewport} className="mb-10 text-left sm:mb-16 sm:text-center">
-          <motion.h2 variants={revealUp(0)} className="mb-3 font-display text-4xl font-bold tracking-tight text-ink">
-            {copy.howItWorks.title}
-          </motion.h2>
-          <motion.p variants={revealUp(0.08, 16)} className="font-body text-base leading-relaxed text-ink-muted sm:text-lg">
-            {copy.howItWorks.description}
-          </motion.p>
-        </motion.div>
-
-        <div className="relative z-10 mb-12 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:mb-16 lg:grid-cols-4 lg:gap-8">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={storyViewport}
-            variants={drawIn(0.16)}
-            className="pointer-events-none absolute left-[5%] right-[-10%] top-[40%] -z-10 hidden opacity-40 md:block"
-          >
-            <Trail2 strokeColor="var(--caramel)" className="h-48 w-full rotate-6" preserveAspectRatio="none" />
-            <div className="absolute left-[18%] top-6 opacity-80">
-              <Crumb4 className="h-2.5 w-2.5" fillColor="var(--cream)" strokeColor="var(--terracotta)" />
-            </div>
-            <div className="absolute left-[58%] top-16 opacity-80">
-              <Crumb4 className="h-3 w-3" fillColor="var(--butter)" strokeColor="var(--orange)" />
-            </div>
+        <div className="mb-8 max-w-3xl text-left lg:mb-10">
+          <motion.div initial="hidden" whileInView="visible" viewport={storyViewport} className="text-left">
+            <motion.p variants={revealUp(0)} className="mb-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-ink-faint">
+              {copy.howItWorks.eyebrow}
+            </motion.p>
+            <motion.h2 variants={revealUp(0.04, 12)} className="mb-3 font-display text-4xl font-bold tracking-tight text-ink md:text-5xl">
+              {copy.howItWorks.title}
+            </motion.h2>
+            <motion.p variants={revealUp(0.08, 16)} className="max-w-3xl font-body text-base leading-relaxed text-ink-muted sm:text-lg">
+              {copy.howItWorks.description}
+            </motion.p>
           </motion.div>
+        </div>
 
+        <div className="relative z-10 mb-10 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-2 lg:gap-6">
           {steps.map((step, index) => (
             <motion.div
               key={step.num}
@@ -46,20 +35,20 @@ export function HowItWorks() {
               whileInView="visible"
               viewport={storyViewport}
               variants={revealUp(index * 0.08, 18)}
-              className="group/step relative flex cursor-default flex-col items-start rounded-drawn border-[3px] border-ink bg-cream p-5 text-left shadow-[4px_4px_0_var(--ink)] transition-all hover:-translate-y-1 hover:shadow-[6px_6px_0_var(--orange)] sm:items-center sm:p-6 sm:text-center lg:hover:-rotate-1"
+              className="group/step relative flex min-h-[168px] cursor-default flex-col items-start rounded-drawn border-[3px] border-ink bg-white/90 px-4 py-5 text-left shadow-[4px_4px_0_var(--ink)] transition-all hover:-translate-y-0.5 hover:shadow-[5px_5px_0_var(--caramel)] sm:px-5 sm:py-6 lg:min-h-[198px]"
             >
-              <div className="pointer-events-none absolute right-4 top-4 opacity-50 transition-transform duration-300 group-hover/step:-translate-y-1 group-hover/step:rotate-6 group-hover/step:opacity-90">
+              <div className="pointer-events-none absolute right-4 top-4 opacity-35 transition-transform duration-300 group-hover/step:-translate-y-1 group-hover/step:rotate-6 group-hover/step:opacity-70">
                 <Scribble2 className="h-6 w-6" strokeColor="var(--terracotta)" strokeWidth={3} />
               </div>
 
               <motion.div
                 variants={revealScale(index * 0.08 + 0.04, 0.88)}
-                className="mb-4 flex h-12 w-12 items-center justify-center rounded-drawn border-[3px] border-ink bg-butter font-display text-2xl font-bold text-ink shadow-[2px_2px_0_var(--ink)] transition-transform duration-300 group-hover/step:-translate-y-1"
+                className="mb-3 flex h-11 w-11 items-center justify-center rounded-drawn border-[3px] border-ink bg-butter font-display text-lg font-bold text-ink shadow-[2px_2px_0_var(--ink)] transition-transform duration-300 group-hover/step:-translate-y-1 sm:mb-4 sm:h-12 sm:w-12 sm:text-xl"
               >
                 {step.num}
               </motion.div>
-              <h3 className="mb-2 font-display text-xl font-bold text-ink">{step.title}</h3>
-              <p className="text-sm leading-relaxed text-ink-muted">{step.desc}</p>
+              <h3 className="mb-2 font-display text-xl font-bold text-ink sm:text-[1.4rem]">{step.title}</h3>
+              <p className="max-w-[30ch] text-[15px] leading-relaxed text-ink-muted">{step.desc}</p>
             </motion.div>
           ))}
         </div>

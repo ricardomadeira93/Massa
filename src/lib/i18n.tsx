@@ -29,6 +29,14 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
       setLanguage('es');
       return;
     }
+    if (browserLanguage.startsWith('it')) {
+      setLanguage('it');
+      return;
+    }
+    if (browserLanguage.startsWith('ar')) {
+      setLanguage('ar');
+      return;
+    }
     if (browserLanguage.startsWith('en')) {
       setLanguage('en');
     }
@@ -37,6 +45,7 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     window.localStorage.setItem(languageStorageKey, language);
     document.documentElement.lang = languageMeta[language].htmlLang;
+    document.documentElement.dir = languageMeta[language].dir;
   }, [language]);
 
   const value = useMemo<I18nContextValue>(
