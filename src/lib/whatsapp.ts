@@ -18,45 +18,42 @@ export function buildWhatsAppUrl(data: OrderFormData, language: Language): strin
     throw new Error(copy.whatsapp.errors.productOrSlot);
   }
 
-  let message = `🍪 *${copy.whatsapp.labels.title}*
-
-*${copy.whatsapp.labels.name}:* ${data.name.trim()}
-*${copy.whatsapp.labels.phone}:* ${data.phone.trim()}
-*${copy.whatsapp.labels.bloco}:* ${data.bloco.trim()}
-
-*${copy.whatsapp.labels.order}:* ${translateText(product.name, language)} (${product.cookieCount} cookies) — R$ ${product.price}
-*${copy.whatsapp.labels.category}:* ${categoryLabel}
-*${copy.whatsapp.labels.delivery}:* ${translateText(slot.label, language)} (${translateText(slot.dateLabel, language)})`;
+  const lines = [
+    `🍪 *${copy.whatsapp.labels.title}*`,
+    '',
+    `🤎 *${copy.whatsapp.labels.name}:* ${data.name.trim()}`,
+    `📱 *${copy.whatsapp.labels.phone}:* ${data.phone.trim()}`,
+    `🏢 *${copy.whatsapp.labels.bloco}:* ${data.bloco.trim()}`,
+    '',
+    `📦 *${copy.whatsapp.labels.order}:* ${translateText(product.name, language)} (${product.cookieCount} cookies) — R$ ${product.price}`,
+    `🏷️ *${copy.whatsapp.labels.category}:* ${categoryLabel}`,
+    `🕒 *${copy.whatsapp.labels.delivery}:* ${translateText(slot.label, language)} (${translateText(slot.dateLabel, language)})`,
+  ];
 
   if (product.limitedNote) {
-    message += `
-*${copy.whatsapp.labels.offerNote}:* ${translateText(product.limitedNote, language)}`;
+    lines.push(`✨ *${copy.whatsapp.labels.offerNote}:* ${translateText(product.limitedNote, language)}`);
   }
 
   if (data.flavourNote.trim()) {
-    message += `
-*${copy.whatsapp.labels.flavour}:* ${data.flavourNote.trim()}`;
+    lines.push('', `🍫 *${copy.whatsapp.labels.flavour}:* ${data.flavourNote.trim()}`);
   }
 
   if (data.allergyNote.trim()) {
-    message += `
-*${copy.whatsapp.labels.allergies}:* ${data.allergyNote.trim()}`;
+    lines.push(`⚠️ *${copy.whatsapp.labels.allergies}:* ${data.allergyNote.trim()}`);
   }
 
   if (data.isGift) {
-    message += `
-
-🎁 *${copy.whatsapp.labels.giftTitle}*
-*${copy.whatsapp.labels.giftFor}:* ${data.giftRecipient.trim()}
-*${copy.whatsapp.labels.giftMessage}:* ${data.giftMessage.trim()}`;
+    lines.push(
+      '',
+      `🎁 *${copy.whatsapp.labels.giftTitle}*`,
+      `💝 *${copy.whatsapp.labels.giftFor}:* ${data.giftRecipient.trim()}`,
+      `✉️ *${copy.whatsapp.labels.giftMessage}:* ${data.giftMessage.trim()}`,
+    );
   }
 
-  message += `
+  lines.push('', '---', copy.whatsapp.labels.closing);
 
----
-${copy.whatsapp.labels.closing}`;
-
-  return buildWhatsAppPrefillUrl(message);
+  return buildWhatsAppPrefillUrl(lines.join('\n'));
 }
 
 export function buildWhatsAppPrefillUrl(message: string): string {

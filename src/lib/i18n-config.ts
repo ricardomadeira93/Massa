@@ -17,7 +17,7 @@ export function translateText(value: LocalizedText | string, language: Language)
     return value;
   }
 
-  return value[language] ?? value[defaultLanguage];
+  return value[language] ?? value.pt;
 }
 
 const uiCopyBase = {
@@ -902,4 +902,4 @@ export const uiCopy = {
       },
     },
   },
-} as const satisfies Record<Language, (typeof uiCopyBase)['pt']>;
+} as const;
